@@ -31,7 +31,6 @@
   import { connect } from 'wepy-redux'
   import { INCREMENT, DECREMENT } from '../store/types/counter'
   import { asyncInc } from '../store/actions'
-
   @connect({
     stateNum (state) {
       return state.counter.num

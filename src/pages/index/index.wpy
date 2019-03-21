@@ -1,0 +1,37 @@
+<style lang="less">
+</style>
+<template>
+  <button @tap="getGoods">刷新</button>
+</template>
+
+<script>
+import wepy from 'wepy';
+import constant from '@/common/constant';
+import { connect } from 'wepy-redux';
+import { getGoods } from '../../store/actions';
+
+@connect(
+  {
+    goodsList(state) {
+      console.error(state.indexReducer);
+
+      return state.indexReducer.data;
+    },
+    hasMore (state){
+      return state.indexReducer.hasMore;
+    }
+  },
+  {
+    getGoods
+  }
+)
+export default class Index extends wepy.page {
+  onLoad() {
+    this.methods.getGoods();
+  }
+  components = {};
+
+  data = {};
+  methods = {};
+}
+</script>
