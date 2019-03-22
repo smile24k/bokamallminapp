@@ -1,7 +1,15 @@
 <style lang="less">
 </style>
 <template>
-  <button @tap="getGoods">刷新</button>
+  <repeat for="{{goodsList}}">
+    <view>{{item.goodsName}}</view>
+  </repeat>
+  <form report-submit="true" @submit="submit">
+    <button size="defult" type="defult" form-type="submit">
+      发送formId
+    </button>
+  </form>
+  
 </template>
 
 <script>
@@ -13,12 +21,16 @@ import { getGoods } from '../../store/actions';
 @connect(
   {
     goodsList(state) {
-      console.error(state.indexReducer);
-
       return state.indexReducer.data;
     },
-    hasMore (state){
+    hasMore(state) {
       return state.indexReducer.hasMore;
+    },
+    loading(state) {
+      return state.indexReducer.loading;
+    },
+    page(state) {
+      return state.indexReducer.page;
     }
   },
   {
@@ -27,11 +39,23 @@ import { getGoods } from '../../store/actions';
 )
 export default class Index extends wepy.page {
   onLoad() {
-    this.methods.getGoods();
+    this.methods.getGoods(1,'boka');
+    console.log(this);
   }
   components = {};
 
-  data = {};
-  methods = {};
+  data = {
+
+  };
+  methods = {
+    submit(e){
+      console.log(e);
+      
+    }
+  };
+  onReachBottom(){
+    console.log('hh');
+    
+  }
 }
 </script>
