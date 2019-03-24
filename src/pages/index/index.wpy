@@ -1,15 +1,18 @@
 <style lang="less">
+  page{
+    height: 100%;
+  >.index-view{
+    height: 100%;
+  }
+  }
 </style>
 <template>
-  <repeat for="{{goodsList}}">
-    <view>{{item.goodsName}}</view>
-  </repeat>
-  <form report-submit="true" @submit="submit">
-    <button size="defult" type="defult" form-type="submit">
-      发送formId
-    </button>
-  </form>
-  
+  <scroll-view scroll-y scroll-with-animation @scrolltolower="scrolltolower" class="index-view" lower-threshold="200">
+    <banner/>
+    <repeat for="{{goodsList}}" item="item">
+      <item :goodsDetail="item"/>
+    </repeat>
+  </scroll-view>
 </template>
 
 <script>
@@ -17,6 +20,8 @@ import wepy from 'wepy';
 import constant from '@/common/constant';
 import { connect } from 'wepy-redux';
 import { getGoods } from '../../store/actions';
+import banner from '@/components/banner';
+import item from '@/components/item';
 
 @connect(
   {
@@ -39,22 +44,29 @@ import { getGoods } from '../../store/actions';
 )
 export default class Index extends wepy.page {
   onLoad() {
-    this.methods.getGoods(1,'boka');
+    this.methods.getGoods(1, 'boka');
     console.log(this);
   }
-  components = {};
-
-  data = {
-
+  components = {
+    banner,
+    item
   };
+
+  data = {};
   methods = {
-    submit(e){
-      console.log(e);
-      
+    click(e) {
+      console.log(11);
+      this.$broadcast('banner-broadcast', 1, 3, 4);
+    },
+    scrolltolower(e){
+      let {page,hasMore,loading} = this;
+    if(loading || !hasMore){
+      return;
+    }
+    this.methods.getGoods(page,'boka');
     }
   };
-  onReachBottom(){
-    console.log('hh');
+  onReachBottom() {
     
   }
 }

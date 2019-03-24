@@ -1,0 +1,62 @@
+<style lang="less">
+  swiper{
+    swiper-item{
+      height: 100%;
+      image{
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+</style>
+<template>
+  <swiper autoplay circular>
+      <block wx:for="{{images}}" wx:key="">
+          <swiper-item>
+              <image @tap="jumpUrl({{item}})" mode="aspectFill" src="{{item.typeImage}}"></image>
+          </swiper-item>
+      </block>
+  </swiper>
+</template>
+<script>
+import wepy from 'wepy';
+import constant from '@/common/constant';
+export default class Banner extends wepy.component {
+  data = {
+    images:[]
+  };
+
+  events = {
+    'banner-broadcast': (...args) => {
+      let $event = args[args.length - 1];
+      console.log($event);
+      console.log(
+        `${this.$name} receive ${$event.name} from ${$event.source.name}`
+      );
+    }
+  };
+
+  methods = {
+    jumpUrl(item){
+      console.log(item);
+      wepy.showToast({
+        title: '成功了', //提示的内容,
+        icon: 'none', //图标,
+        duration: 2000, //延迟时间,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
+      
+    }
+  };
+
+  onLoad() {
+    wepy.request({
+      url: constant.apiUrl + '/activity/types?product=fzone&advStatus=5'
+    }).then(d => {
+      this.images = d.result;
+      this.$apply();
+    });
+  }
+}
+</script>

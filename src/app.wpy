@@ -43,8 +43,15 @@ export default class extends wepy.app {
       config(p) {
         // 对所有request请求中的OBJECT参数对象统一附加时间戳属性
         p.timestamp = +new Date();
-        p.header.device_id = 'bokaMappMinApp';
-        p.header.access_token = '123456';
+        if(p.header){
+          p.header.device_id = 'bokaMappMinApp';
+          p.header.access_token = '123456';
+        }else{
+          p.header = {
+            device_id : 'bokaMappMinApp',
+          access_token : '123456'
+          }
+        }
         // console.log('config request: ', p);
         // 必须返回OBJECT参数对象，否则无法发送请求到服务端
         return p;
