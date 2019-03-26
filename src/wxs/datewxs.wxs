@@ -1,0 +1,6 @@
+
+module.exports = {
+  filter: function (date,formate) {
+    return date + formate;
+  }
+};

@@ -1,0 +1,47 @@
+<style lang="less">
+</style>
+<template>
+  <view class="goods-detail">{{date.filter(goods.createDate,'yyyy-MM-dd')}}</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import constant from '@/common/constant';
+import { connect } from 'wepy-redux';
+import { getGoodsById } from '../../store/actions';
+import banner from '@/components/banner';
+import item from '@/components/item';
+import datewxs from '../../wxs/datewxs.wxs';
+
+@connect(
+  {
+    goods(state) {
+      return state.goodsDetail.data;
+    }
+  },
+  {
+    getGoodsById
+  }
+)
+export default class GoodsDetail extends wepy.page {
+  async onLoad(options) {
+    const asyncData = await this.methods.getGoodsById(
+      options.goods,
+      options.product
+    );
+    wepy.setNavigationBarTitle({
+      title: asyncData.payload.result.goodsName || '商品详情'
+    });
+  }
+  components = {};
+
+  data = {
+  };
+
+  wxs = {
+    date: datewxs
+  };
+  methods = {};
+  onReachBottom() {}
+}
+</script>

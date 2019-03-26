@@ -1,17 +1,41 @@
 <style lang="less">
-  page{
-    height: 100%;
-  >.index-view{
-    height: 100%;
-  }
-  }
+  @import "./src/less/index";
 </style>
 <template>
-  <scroll-view scroll-y scroll-with-animation @scrolltolower="scrolltolower" class="index-view" lower-threshold="200">
+  <scroll-view
+    scroll-y
+    scroll-with-animation
+    @scrolltolower="scrolltolower"
+    class="index-view"
+    lower-threshold="300"
+  >
+    <view class='serach_wrap'>
+        <view class='11' bindtap='goBoka'>
+          <image class='smile' src='../../images/index_knowledge_boka.png' mode='widthFix'></image>
+        </view>
+        <view class='11' bindtap='bokaCallMe'>
+          <image class='smile' src='../../images/index_boka_callme.png' mode='widthFix'></image>
+        </view>
+      </view>
     <banner/>
-    <repeat for="{{goodsList}}" item="item">
-      <item :goodsDetail="item"/>
-    </repeat>
+    <view class='category_wrap'>
+        <view class='category'>
+          <view class='list' wx:for="{{bokaCategory}}" wx:key="id">
+            <form bindsubmit="chooseType" data-id="{{item.id}}" report-submit='true'>
+                <button form-type="submit" type="default" plain='true' class="footer_list">
+                  <image src="{{item.img}}"></image>
+                </button>
+                <text>{{item.name}}</text>
+            </form>
+          </view>
+        </view>
+      </view>
+    <view class="repeat-wrap">
+      <repeat for="{{goodsList}}" item="item">
+        <item :goodsDetail="item"/>
+      </repeat>
+      <view class="clearfix"></view>
+    </view>
   </scroll-view>
 </template>
 
@@ -52,22 +76,22 @@ export default class Index extends wepy.page {
     item
   };
 
-  data = {};
+  data = {
+    bokaCategory: [{ name: "自营", id: 1, img: "../../images/boka_category_2.png" }, { name: "优选", id: 2, img: "../../images/boka_category_3.png" }, { name: "订单", id: -1, img: "../../images/boka_order_icon.png" }],
+  };
   methods = {
     click(e) {
       console.log(11);
       this.$broadcast('banner-broadcast', 1, 3, 4);
     },
-    scrolltolower(e){
-      let {page,hasMore,loading} = this;
-    if(loading || !hasMore){
-      return;
-    }
-    this.methods.getGoods(page,'boka');
+    scrolltolower(e) {
+      let { page, hasMore, loading } = this;
+      if (loading || !hasMore) {
+        return;
+      }
+      this.methods.getGoods(page, 'boka');
     }
   };
-  onReachBottom() {
-    
-  }
+  onReachBottom() {}
 }
 </script>
