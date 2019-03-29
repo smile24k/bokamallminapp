@@ -39,9 +39,7 @@ import wepy from 'wepy';
 import constant from '@/common/constant';
 export default class Banner extends wepy.component {
   data = {
-    images:[],
-    moives:[],
-    someData:[]
+    moives:[]
   };
 
   events = {
@@ -54,8 +52,11 @@ export default class Banner extends wepy.component {
     }
   };
   props = {
-    moives:Array,
-    twoWay: true
+    moives:{
+      type:Object,
+      default:null,
+      twoWay:true
+    }
   }
   methods = {
     jumpUrl(item){
@@ -69,27 +70,7 @@ export default class Banner extends wepy.component {
   }
 
   onLoad() {
-    wx.cloud.init({
-      traceUser: true
-    });
-    wepy.showLoading({
-      title: '加载中...', //提示的内容,
-      mask: true
-    });
     
-    wx.cloud.callFunction({
-      name: 'moive',
-      success: res => {
-        console.log('[云函数] [douban] data: ', res.result);
-        this.moives = res.result.subjects;
-        wepy.hideLoading();
-        
-        this.$apply();
-      },
-      fail: err => {
-        console.error('[云函数] [douban] 调用失败', err);
-      }
-    });
   }
 }
 </script>
