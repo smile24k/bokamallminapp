@@ -1,29 +1,47 @@
 <style lang="less">
+  .banner{
+    padding: 0 30rpx;
+    background-color: #F4F5F6;
+  }
   swiper{
-    height: 235rpx;
+    height: 488rpx;
+    width: 100%;
+    margin: 0 auto;
     swiper-item{
       image{
         width: 100%;
-        height: 100%;
+        height: 388rpx;
+      }
+      >.title{
+        color: #101033;
+        font-size: 16px;
+        height: 100rpx;
+        line-height: 100rpx;
       }
     }
   }
 </style>
 <template>
+<view class="banner">
   <swiper autoplay circular>
-      <block wx:for="{{images}}" wx:key="">
+      <block wx:for="{{moives}}" wx:key="id">
           <swiper-item>
-              <image @tap="jumpUrl({{item}})" src="{{item.typeImage}}"></image>
+              <image mode="aspectFill" @tap="jumpUrl({{item}})" src="{{item.images.small}}"></image>
+              <view class="title">{{item.title}}</view>
           </swiper-item>
       </block>
   </swiper>
+</view>
+  
 </template>
 <script>
 import wepy from 'wepy';
 import constant from '@/common/constant';
 export default class Banner extends wepy.component {
   data = {
-    images:[]
+    images:[],
+    moives:[],
+    someData:[]
   };
 
   events = {
@@ -35,27 +53,42 @@ export default class Banner extends wepy.component {
       );
     }
   };
-
+  props = {
+    moives:Array,
+    twoWay: true
+  }
   methods = {
     jumpUrl(item){
       console.log(item);
-      wepy.showToast({
-        title: '成功了', //提示的内容,
-        icon: 'none', //图标,
-        duration: 2000, //延迟时间,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
-      });
-      
     }
   };
+  computed = {
+    someData () {
+      return this.moives && this.data.someData
+    }
+  }
 
   onLoad() {
-    wepy.request({
-      url: constant.apiUrl + '/activity/types?product=fzone&advStatus=5'
-    }).then(d => {
-      this.images = d.result;
-      this.$apply();
+    wx.cloud.init({
+      traceUser: true
+    });
+    wepy.showLoading({
+      title: '加载中...', //提示的内容,
+      mask: true
+    });
+    
+    wx.cloud.callFunction({
+      name: 'moive',
+      success: res => {
+        console.log('[云函数] [douban] data: ', res.result);
+        this.moives = res.result.subjects;
+        wepy.hideLoading();
+        
+        this.$apply();
+      },
+      fail: err => {
+        console.error('[云函数] [douban] 调用失败', err);
+      }
     });
   }
 }

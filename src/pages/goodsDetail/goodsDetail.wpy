@@ -1,7 +1,7 @@
 <style lang="less">
 </style>
 <template>
-  <view class="goods-detail">{{date.filter(goods.createDate,'yyyy-MM-dd')}}</view>
+  <view class="goods-detail">{{date.dateFormat(goods.createDate,'yyyy-MM-dd')}}</view>
 </template>
 
 <script>
