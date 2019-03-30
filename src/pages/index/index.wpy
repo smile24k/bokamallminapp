@@ -13,6 +13,9 @@
       <input class="search" placeholder-class="placholder" placeholder="{{placeholder}}"/>
     </view>
     <Banner :moives.sync="moives"></Banner>
+    <moiveListCopy :moives.sync="kbData" :title="title2"></moiveListCopy>
+
+    <moiveList :moives.sync="top250Data" :title="title1"></moiveList>
   </view>
 </template>
 
@@ -20,60 +23,58 @@
 import wepy from 'wepy';
 import constant from '@/common/constant';
 import { connect } from 'wepy-redux';
-import { getGoods } from '../../store/actions';
+import { getMoives,getTop250 ,getNewMoive} from '../../store/actions';
 import banner from '@/components/banner';
+import moiveList from '@/components/moiveList';
+
 import item from '@/components/item';
 
 @connect(
-  {},
-  {}
+  {
+    moives (state) {
+      console.log(state)
+      return state.indexReducer.moives.subjects
+    },
+    top250Data (state) {
+      return state.indexReducer.top250.subjects
+    },
+    kbData (state) {
+      return state.indexReducer.newMoives.subjects
+    }
+  },
+  {
+    getMoives,
+    getTop250,
+    getNewMoive
+  }
 )
 export default class Index extends wepy.page {
   async onLoad() {
+    wepy.showLoading({
+      title: '加载中...', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
     
-    wx.cloud.init({
-      traceUser: true
-    });
-    wx.cloud.callFunction({
-      name: 'moive',
-      success: res => {
-        console.log('[云函数] [douban] data: ', res.result);
-        this.moives = res.result.subjects;
-        this.$apply();
-      },
-      fail: err => {
-        console.error('[云函数] [douban] 调用失败', err);
-      }
-    });
-    /* wx.cloud.callFunction({
-      name: 'top250',
-      success: res => {
-        console.log('[云函数] [douban] data: ', res);
-      },
-      fail: err => {
-        console.error('[云函数] [douban] 调用失败', err);
-      }
-    });
-    wx.cloud.callFunction({
-      name: 'moiveDetail',
-      data: {
-        id: '4864908'
-      },
-      success: res => {
-        console.log('[云函数] [douban] data: ', res);
-      },
-      fail: err => {
-        console.error('[云函数] [douban] 调用失败', err);
-      }
-    }); */
+    await this.methods.getMoives();
+    await this.methods.getTop250();
+    await this.methods.getNewMoive();
+    wepy.hideLoading();
+    
   }
   components = {
-    Banner:banner
+    Banner:banner,
+    moiveList:moiveList,
+    moiveListCopy:moiveList
   };
 
   data = {
     moives:[],
-    placeholder:'请输入片名、主演或导演'
+    top250Data:[],
+    kbData:[],
+    placeholder:'请输入片名、主演或导演',
+    title1:'Top250',
+    title2:'新片榜'
   };
   methods = {
   };

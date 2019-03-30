@@ -14,5 +14,7 @@
 	"projectname": "bokamallminapp",
 	"miniprogramRoot": "dist/",
 	"cloudfunctionRoot": "cloud-functions/",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {}
 }

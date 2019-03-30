@@ -7,11 +7,7 @@
   justify-content: space-between;
   box-sizing: border-box;
 }
-.clearfix {
-  clear: both;
-  height: 0;
-  overflow: hidden;
-}
+
 </style>
 
 <script>
@@ -26,13 +22,14 @@ setStore(store);
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/index/index', 'pages/home/home', 'pages/goodsDetail/goodsDetail'],
+    pages: ['pages/index/index', 'pages/home/home', 'pages/moiveDetail/moiveDetail'],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '博卡商城',
       navigationBarTextStyle: 'black'
-    }
+    },
+    cloud:true
   };
 
   globalData = {

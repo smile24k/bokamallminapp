@@ -1,7 +1,10 @@
 <style lang="less">
 </style>
 <template>
-  <view class="goods-detail">{{date.dateFormat(goods.createDate,'yyyy-MM-dd')}}</view>
+  <view>
+  <!-- <view class="goods-detail">{{date.dateFormat(goods.createDate,'yyyy-MM-dd')}}</view> -->
+  {{id}}
+  </view>
 </template>
 
 <script>
@@ -15,27 +18,25 @@ import datewxs from '../../wxs/datewxs.wxs';
 
 @connect(
   {
-    goods(state) {
-      return state.goodsDetail.data;
-    }
   },
   {
-    getGoodsById
   }
 )
-export default class GoodsDetail extends wepy.page {
+export default class MoiveDetail extends wepy.page {
   async onLoad(options) {
-    const asyncData = await this.methods.getGoodsById(
-      options.goods,
-      options.product
-    );
-    wepy.setNavigationBarTitle({
-      title: asyncData.payload.result.goodsName || '商品详情'
-    });
+    this.id = options.id;
+    // const asyncData = await this.methods.getGoodsById(
+    //   options.goods,
+    //   options.product
+    // );
+    // wepy.setNavigationBarTitle({
+    //   title: asyncData.payload.result.goodsName || '商品详情'
+    // });
   }
   components = {};
 
   data = {
+    id:''
   };
 
   wxs = {

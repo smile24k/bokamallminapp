@@ -1,19 +1,27 @@
 import { handleActions } from 'redux-actions'
-import { INDEX_GETGOODS_BEGTIN, INDEX_GETGOODS } from '../types/indexType'
+import { GET_NEW_MOIVE, GET_MOIVES, GET_TOP250 } from '../types/indexType'
 
 export default handleActions({
-  [INDEX_GETGOODS](state, action) {
+  [GET_MOIVES](state, action) {
     return {
       ...state,
-      hasMore: action.payload.result.length >= 10,
-      loading: false,
-      data: state.data.concat(action.payload.result),
-      page: state.page + 1
+      moives:action.payload
+    }
+  },
+  [GET_TOP250](state, action) {
+    return {
+      ...state,
+      top250:action.payload
+    }
+  },
+  [GET_NEW_MOIVE](state, action) {
+    return {
+      ...state,
+      newMoives:action.payload
     }
   }
 }, {
-    hasMore: true,
-    loading: true,
-    data: [],
-    page: 1
+  moives: {},
+  top250:{},
+  newMoives:{}
   })
