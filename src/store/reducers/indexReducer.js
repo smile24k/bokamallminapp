@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { GET_NEW_MOIVE, GET_MOIVES, GET_TOP250 } from '../types/indexType'
+import { GET_NEW_MOIVE, GET_MOIVES, GET_TOP250 ,GET__MOIVE_DETAIL} from '../types/indexType'
 
 export default handleActions({
   [GET_MOIVES](state, action) {
@@ -19,9 +19,16 @@ export default handleActions({
       ...state,
       newMoives:action.payload
     }
+  },
+  [GET__MOIVE_DETAIL](state, action) {
+    return {
+      ...state,
+      moiveDetail:action.payload
+    }
   }
 }, {
   moives: {},
   top250:{},
-  newMoives:{}
+  newMoives:{},
+  moiveDetail:{}
   })

@@ -1,9 +1,15 @@
 <style lang="less">
+  .moive-detail{
+    >.banner-img{
+      width: 100%;
+      height: 300rpx;
+    }
+  }
 </style>
 <template>
-  <view>
+  <view class="moive-detail">
   <!-- <view class="goods-detail">{{date.dateFormat(goods.createDate,'yyyy-MM-dd')}}</view> -->
-  {{id}}
+    <image mode="aspectFill" class="banner-img" src="{{moiveDetail.image}}"></image>
   </view>
 </template>
 
@@ -11,27 +17,34 @@
 import wepy from 'wepy';
 import constant from '@/common/constant';
 import { connect } from 'wepy-redux';
-import { getGoodsById } from '../../store/actions';
+import { getMoiveById } from '../../store/actions';
 import banner from '@/components/banner';
 import item from '@/components/item';
 import datewxs from '../../wxs/datewxs.wxs';
 
 @connect(
   {
+    moiveDetail(state){
+      return state.indexReducer.moiveDetail
+    }
   },
   {
+    getMoiveById
   }
 )
 export default class MoiveDetail extends wepy.page {
   async onLoad(options) {
     this.id = options.id;
-    // const asyncData = await this.methods.getGoodsById(
-    //   options.goods,
-    //   options.product
-    // );
-    // wepy.setNavigationBarTitle({
-    //   title: asyncData.payload.result.goodsName || '商品详情'
-    // });
+    wepy.showLoading({
+      title: '加载中...', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
+    
+    await this.methods.getMoiveById(options.id);
+    wepy.setNavigationBarTitle({ title: this.moiveDetail.title });
+    wepy.hideLoading();
+    
   }
   components = {};
 
