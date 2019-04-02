@@ -7,7 +7,6 @@
   justify-content: space-between;
   box-sizing: border-box;
 }
-
 </style>
 
 <script>
@@ -22,26 +21,30 @@ setStore(store);
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/index/index', 'pages/home/home', 'pages/moiveDetail/moiveDetail'],
+    pages: [
+      'pages/index/index',
+      'pages/home/home',
+      'pages/moiveDetail/moiveDetail',
+      'pages/auth/auth',
+    ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '博卡商城',
       navigationBarTextStyle: 'black'
     },
-    cloud:true
+    cloud: true
   };
 
   globalData = {
     userInfo: null
   };
-  showLoading(){
+  showLoading() {
     wepy.showLoading({
       title: '加载中...', //提示的内容,
       mask: true, //显示透明蒙层，防止触摸穿透,
       success: res => {}
     });
-    
   }
 
   constructor() {
@@ -56,14 +59,14 @@ export default class extends wepy.app {
         if (p.header) {
           // p.header.device_id = 'bokaMappMinApp';
           // p.header.access_token = '123456';
-          p.header["content-type"] = "application/xml"
+          p.header['content-type'] = 'application/xml';
         } else {
           /* p.header = {
             device_id: 'bokaMappMinApp',
             access_token: '123456'
           }; */
-           p.header = {
-            "content-type": 'application/xml'
+          p.header = {
+            'content-type': 'application/xml'
           };
         }
         // console.log('config request: ', p);
@@ -93,8 +96,14 @@ export default class extends wepy.app {
     });
   }
 
-  onLaunch() {
-    this.testAsync();
+  async onLaunch() {
+    const userInfo = await this.getUserInfo();
+    console.log(userInfo);
+    if(!userInfo.nickName){
+      wepy.reLaunch({ url: '../auth/auth?url=../auth/auth' });
+      
+    }
+    
   }
 
   sleep(s) {
@@ -107,19 +116,25 @@ export default class extends wepy.app {
 
   async testAsync() {
     const data = await this.sleep(3);
-    console.log(data);
   }
 
   getUserInfo(cb) {
     const that = this;
-    if (this.globalData.userInfo) {
-      return this.globalData.userInfo;
-    }
-    wepy.getUserInfo({
-      success(res) {
-        that.globalData.userInfo = res.userInfo;
-        cb && cb(res.userInfo);
+    return new Promise((resolve, reject) => {
+      if (this.globalData.userInfo) {
+        resolve(this.globalData.userInfo);
       }
+      wx.getUserInfo({
+        success: function(res){
+          resolve(res.userInfo);
+        },
+        fail: function(err) {
+          resolve(err);
+        },
+        complete: function(res) {
+          resolve(res);
+        }
+      })
     });
   }
 }

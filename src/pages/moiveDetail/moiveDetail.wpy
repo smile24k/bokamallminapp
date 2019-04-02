@@ -34,12 +34,9 @@ import datewxs from '../../wxs/datewxs.wxs';
 )
 export default class MoiveDetail extends wepy.page {
   async onLoad(options) {
+    console.log(this.$parent);
     this.id = options.id;
-    wepy.showLoading({
-      title: '加载中...', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    this.$parent.showLoading();
     
     await this.methods.getMoiveById(options.id);
     wepy.setNavigationBarTitle({ title: this.moiveDetail.title });

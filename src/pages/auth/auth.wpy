@@ -1,0 +1,27 @@
+<style lang="less">
+</style>
+<template>
+  <view>
+    <button open-type="getUserInfo" size=defult" type=defult" form-type="reset">
+        请授权获取您的用户信息
+    </button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import constant from '@/common/constant';
+
+export default class Auth extends wepy.page {
+  async onLoad(options) {
+    
+    
+  }
+  components = {};
+
+  data = {
+  };
+  methods = {};
+  onReachBottom() {}
+}
+</script>

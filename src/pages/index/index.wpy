@@ -32,7 +32,6 @@ import item from '@/components/item';
 @connect(
   {
     moives (state) {
-      console.log(state)
       return state.indexReducer.moives.subjects
     },
     top250Data (state) {
@@ -50,6 +49,9 @@ import item from '@/components/item';
 )
 export default class Index extends wepy.page {
   async onLoad() {
+    this.$parent.data = [];
+    
+    
     this.$parent.showLoading();
     await this.methods.getMoives();
     await this.methods.getNewMoive();
